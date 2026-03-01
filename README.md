@@ -144,14 +144,6 @@ GET /production/simulation
 }
 ```
 
-## Data Model
-
-| Entity | Fields |
-|--------|--------|
-| Product | id, name, price |
-| RawMaterial | id, name, stockQuantity |
-| ProductRawMaterial | id, product_id, raw_material_id, required_quantity |
-
 ## Technical Decisions
 
 - BigDecimal used for financial precision
