@@ -1,183 +1,170 @@
-#  Inventory Production Planning System
+# Inventory Production Planning System
 
 A fullstack application for managing products, raw materials, and performing intelligent production simulation based on stock availability and value prioritization.
 
----
+## Objective
 
-##  Objective
+To optimize inventory and production planning by maximizing production value through intelligent allocation of shared raw materials.
 
 This system allows:
-* Product management
-* Raw material management
-* Product composition definition (Bill of Materials)
-* Individual product production simulation
-* Global production simulation
-* Automatic prioritization of production by highest product value
-* Calculation of total production value
+- Product management
+- Raw material management
+- Product composition definition (Bill of Materials)
+- Individual product production simulation
+- Global production simulation
+- Automatic prioritization of production by highest product value
+- Calculation of total production value
 
 The core business rule follows a greedy allocation strategy, prioritizing higher-value products when raw materials are shared.
 
----
-
-##  Architecture
+## Architecture
 
 ### Backend
-* Java 17+
-* Quarkus
-* JAX-RS (REST API)
-* Hibernate ORM (Panache)
-* PostgreSQL
-* Maven
+- Java 17+
+- Quarkus
+- JAX-RS (REST API)
+- Hibernate ORM (Panache)
+- PostgreSQL
+- Maven
 
 ### Frontend
-* React
-* Vite
-* Axios
-* React Router
-* TailwindCSS
+- React
+- Vite
+- Axios
+- React Router
+- TailwindCSS
 
----
-
-##  Core Business Logic
+## Core Business Logic
 
 The global production simulation:
-1. Sorts products by price (descending).
-2. Calculates maximum producible quantity based on available stock.
-3. Virtually consumes stock.
-4. Continues to the next product.
+1. Sorts products by price (descending)
+2. Calculates maximum producible quantity based on available stock
+3. Virtually consumes stock
+4. Continues to the next product
 5. Returns:
-   * List of producible products
-   * Quantities
-   * Total aggregated production value
+    - List of producible products
+    - Quantities
+    - Total aggregated production value
 
 > **Important:** A raw material may be shared across multiple products. The system prioritizes higher-value products as required.
-> 
+>
 > **Note:** The simulation does not modify real stock.
-
----
 
 ## How to Run
 
-### 1 Backend
+### Backend
 
 **Requirements**
-* Java 17+
-* Maven
-* PostgreSQL running locally
+- Java 17+
+- Maven
+- PostgreSQL running locally
 
 **Create Database**
-
+```sql
 CREATE DATABASE inventory;
+```
 
 **Configure application.properties**
-
-Properties
+```properties
 quarkus.datasource.db-kind=postgresql
 quarkus.datasource.username=postgres
 quarkus.datasource.password=postgres
 quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/inventory
-
 quarkus.hibernate-orm.database.generation=update
-
 quarkus.http.cors=true
 quarkus.http.cors.origins=http://localhost:5173
 quarkus.http.cors.methods=GET,POST,PUT,DELETE
 quarkus.http.cors.headers=*
-Run Backend
+```
 
-**Bash**
+**Run Backend**
+```bash
 ./mvnw quarkus:dev
-The Backend will be available at: http://localhost:8080
+```
+The Backend will be available at: `http://localhost:8080`
 
- ---
-
-### 2️ FrontEnd
+### Frontend
 
 **Install Dependencies**
-
-Bash
+```bash
 npm install
-Run Application
+```
 
-Bash
+**Run Application**
+```bash
 npm run dev
-The Frontend will be available at: http://localhost:5173
+```
+The Frontend will be available at: `http://localhost:5173`
 
---- 
+## API Endpoints
 
-**Main API Endpoints**
-Products
-
-HTTP
+### Products
+```http
 GET    /products
 POST   /products
 GET    /products/{id}
-Raw Materials
+```
 
-HTTP
+### Raw Materials
+```http
 GET    /raw-materials
 POST   /raw-materials
-Product Composition
+```
 
-HTTP
+### Product Composition
+```http
 POST   /products/{id}/raw-materials
 GET    /products/{id}/raw-materials
 DELETE /products/{id}/raw-materials/{relationId}
-Individual Product Simulation
+```
 
-HTTP
+### Individual Product Simulation
+```http
 GET /products/{id}/simulation
-Global Production Simulation (Main Requirement)
+```
 
-HTTP
+### Global Production Simulation
+```http
 GET /production/simulation
+```
 
-### Example response:
-
-JSON
+**Example Response:**
+```json
 {
   "products": [
-    {
-      "productId": "uuid",
-      "productName": "Product A",
-      "productPrice": 200,
-      "producibleQuantity": 3,
-      "totalValue": 600
-    }
+     {
+        "productId": "uuid",
+        "productName": "Product A",
+        "productPrice": 200,
+        "producibleQuantity": 3,
+        "totalValue": 600
+     }
   ],
   "totalProductionValue": 900
 }
+```
+
+## Data Model
+
+| Entity | Fields |
+|--------|--------|
+| Product | id, name, price |
+| RawMaterial | id, name, stockQuantity |
+| ProductRawMaterial | id, product_id, raw_material_id, required_quantity |
+
+## Technical Decisions
+
+- BigDecimal used for financial precision
+- Clear separation of concerns: Entity, DTO, Service, Resource
+- Simulation is virtual (does not persist stock changes)
+- Greedy strategy implemented according to business requirement
+
+## Possible Improvements
+
+- Linear programming optimization (true profit maximization)
+- Unit and integration tests
+- Authentication & role management
 
 ---
 
-### Data Model
-
-Product: id, name, price
-
-RawMaterial: id, name, stockQuantity
-
-ProductRawMaterial (Many-to-Many Relationship): id, product_id, raw_material_id, required_quantity
-
----
-
-### Technical Decisions
-BigDecimal used for financial precision.
-
-Clear separation of concerns: Entity, DTO, Service, Resource.
-
-Simulation is virtual (does not persist stock changes).
-
-Greedy strategy implemented according to business requirement.
-
- Possible Improvements
-Linear programming optimization (true profit maximization).
-
-Unit and integration tests.
-
-Authentication & role management.
-
----
-
-### Author
-Thiago Almeida | Fullstack Developer
-
+**Author:** Thiago Almeida | Fullstack Developer
