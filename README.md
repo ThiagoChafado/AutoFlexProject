@@ -89,6 +89,8 @@ Run Backend
 ./mvnw quarkus:dev
 The Backend will be available at: http://localhost:8080
 
+ ---
+
 ### 2️ FrontEnd
 
 **Install Dependencies**
@@ -100,6 +102,8 @@ Run Application
 Bash
 npm run dev
 The Frontend will be available at: http://localhost:5173
+
+--- 
 
 **Main API Endpoints**
 Products
@@ -144,6 +148,8 @@ JSON
   "totalProductionValue": 900
 }
 
+---
+
 ### Data Model
 
 Product: id, name, price
@@ -151,6 +157,8 @@ Product: id, name, price
 RawMaterial: id, name, stockQuantity
 
 ProductRawMaterial (Many-to-Many Relationship): id, product_id, raw_material_id, required_quantity
+
+---
 
 ### Technical Decisions
 BigDecimal used for financial precision.
@@ -167,6 +175,8 @@ Linear programming optimization (true profit maximization).
 Unit and integration tests.
 
 Authentication & role management.
+
+---
 
 ### Author
 Thiago Almeida | Fullstack Developer
