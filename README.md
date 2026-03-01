@@ -66,10 +66,10 @@ The global production simulation:
 * PostgreSQL running locally
 
 **Create Database**
-```sql
+
 CREATE DATABASE inventory;
 
-Configure application.properties
+**Configure application.properties**
 
 Properties
 quarkus.datasource.db-kind=postgresql
@@ -85,13 +85,13 @@ quarkus.http.cors.methods=GET,POST,PUT,DELETE
 quarkus.http.cors.headers=*
 Run Backend
 
-Bash
+**Bash**
 ./mvnw quarkus:dev
 The Backend will be available at: http://localhost:8080
 
-2️ Frontend
+### 2️ FrontEnd
 
-Install Dependencies
+**Install Dependencies**
 
 Bash
 npm install
@@ -101,7 +101,7 @@ Bash
 npm run dev
 The Frontend will be available at: http://localhost:5173
 
- Main API Endpoints
+**Main API Endpoints**
 Products
 
 HTTP
@@ -127,7 +127,8 @@ Global Production Simulation (Main Requirement)
 
 HTTP
 GET /production/simulation
-Example response:
+
+### Example response:
 
 JSON
 {
@@ -142,14 +143,16 @@ JSON
   ],
   "totalProductionValue": 900
 }
- Data Model
+
+### Data Model
+
 Product: id, name, price
 
 RawMaterial: id, name, stockQuantity
 
 ProductRawMaterial (Many-to-Many Relationship): id, product_id, raw_material_id, required_quantity
 
- Technical Decisions
+### Technical Decisions
 BigDecimal used for financial precision.
 
 Clear separation of concerns: Entity, DTO, Service, Resource.
@@ -165,6 +168,6 @@ Unit and integration tests.
 
 Authentication & role management.
 
-Author
-Thiago Almeida Computer Science Student | Fullstack Developer
+### Author
+Thiago Almeida | Fullstack Developer
 
